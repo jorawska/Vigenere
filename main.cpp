@@ -69,46 +69,6 @@ vector<vector<char> > tabula_recta_male (vector<vector<char> > tabula_recta_duze
 	return tabula;
 }
 
-bool przelaczniki (int argc, char* argv[])
-{
-    if (argc < 2 || argc > 8)                                          //sprawdzenie, czy uzytkownik nie podaje za malo lub za duzo argumentow
-	{
-		cout << "Podano niewlasciwa ilosc argumentow" << endl << endl;
-		return false;
-	}
-
-
-    string klucz, nazwa_wejscie, nazwa_wyjscie, zaszyfrowane;        // badanie przelacznikow
-	if (argc > 1)                                                    // pierwszym parametrem jest nazwa programu, sprawdzamy wiec kolejne
-	{
-		for (int i = 1; i < argc; i++)
-		{
-			string arg = argv[i];
-			if (arg == "-h")
-			{
-				return false;
-			}
-
-			if (arg == "-k")
-			{
-				klucz = argv[i + 1];
-			}
-
-			else if (arg == "-o")
-			{
-				nazwa_wyjscie = argv[i + 1];
-			}
-
-			else if (arg == "-i")
-			{
-				nazwa_wejscie = argv[i + 1];
-			}
-		}
-	}
-
-
-    return true;
-}
 
 string odczytanie(string nazwa_wejscie)                         //funkcja odczytuje  dane z pliku
 {
@@ -137,7 +97,7 @@ string szyfrowanie(string nazwa_wejscie, string klucz)
 	string tekst = odczytanie(nazwa_wejscie);
 	string zaszyfrowany = "";
 	vector<vector<char> > tabula_duze = tabula_recta_duze();
-  	vector<vector<char> > tabula_male = tabula_recta_male (vector<vector<char> > tabula_recta_duze());
+  	vector<vector<char> > tabula_male = tabula_recta_male(vector<vector<char> > tabula_recta_duze());
 
 	int dlugosc = tekst.length();
 	string polskieZnaki = "ąćęłóśńżźĄĆĘŁÓŚŃŻŹ";
@@ -239,14 +199,42 @@ void pomoc()
 int main(int argc, char* argv[])
 {
 
-    if (przelaczniki(int arc, char* argv[]) == false)
-    {
-        pomoc();
-        return 0;
-    }
+    if (argc < 2 || argc > 8)                                          //sprawdzenie, czy uzytkownik nie podaje za malo lub za duzo argumentow
+	{
+		cout << "Podano niewlasciwa ilosc argumentow" << endl << endl;
+		return 0;
+	}
 
-    else
-    {   if (odczytanie(nazwa_wejscie) == "blad")
+
+    string klucz, nazwa_wejscie, nazwa_wyjscie, zaszyfrowane;        // badanie przelacznikow
+	if (argc > 1)                                                    // pierwszym parametrem jest nazwa programu, sprawdzamy wiec kolejne
+	{
+		for (int i = 1; i < argc; i++)
+		{
+			string arg = argv[i];
+			if (arg == "-h")
+			{
+				return 0;
+			}
+
+			if (arg == "-k")
+			{
+				klucz = argv[i + 1];
+			}
+
+			else if (arg == "-o")
+			{
+				nazwa_wyjscie = argv[i + 1];
+			}
+
+			else if (arg == "-i")
+			{
+				nazwa_wejscie = argv[i + 1];
+			}
+		}
+	}
+
+       if (odczytanie(nazwa_wejscie) == "blad")
         {
             cerr << "Nie udalo sie otworzyc pliku do zaszyfrowania";
             return 0;
@@ -260,7 +248,7 @@ int main(int argc, char* argv[])
             cerr << "Nie udalo sie zapisac pliku" << endl;
             exit(EXIT_FAILURE);
         }
-    }
+
 
 
 	return 0;
