@@ -70,19 +70,18 @@ string szyfrowanie(string nazwa_wejscie, string klucz)
 	transform(tekst.begin(), tekst.end(), tekst.begin(), ::tolower);
 	string zaszyfrowany = "";
 	vector<vector<char> > tabula = tabula_recta();
-
-    cout << "tekst do szyfrowania: " << tekst<<endl;                            //debug
 	int dlugosc = tekst.length();
-	int iterator = 0;
+	int k = 0;
 	while (klucz.length() < dlugosc)                 // sprawdzam czy klucz jest wystarczajaco dlugi
 	{                                                // jezeli nie to powtarzam go tak dlugo, az bedzie minimum dlugosci tekstu
-		klucz += klucz[iterator];
-		iterator++;
+		klucz += klucz[k];
+		k++;
 	}
 
 	transform(klucz.begin(), klucz.end(), klucz.begin(), ::tolower);
 	int rozmiar = tabula[0].size();
 	int a, b;
+	int l = 0;
 
 
 
@@ -96,7 +95,7 @@ string szyfrowanie(string nazwa_wejscie, string klucz)
 				{
 					a = j;
 				}
-				if (tabula[j][0] == klucz[i])       //sprawdzam gdzie w kolumnie znajduje sie  litera klucza
+				if (tabula[j][0] == klucz[i-l])       //sprawdzam gdzie w kolumnie znajduje sie  litera klucza
 				{
 					b = j;
 				}
@@ -108,9 +107,9 @@ string szyfrowanie(string nazwa_wejscie, string klucz)
 		else
 		{
 			zaszyfrowany += tekst[i];
+			l++;
 		}
 	}
-cout << "tekst zaszyfrowany: " << zaszyfrowany<<endl;       //debug
 	return zaszyfrowany;
 }
 
@@ -146,28 +145,42 @@ void pomoc()
 
 int main(int argc, char* argv[])
 {
-
-    if (argc < 2 || argc > 8)                                          //sprawdzenie, czy uzytkownik nie podaje za malo lub za duzo argumentow
-	{
-		cout << "Podano niewlasciwa ilosc argumentow" << endl << endl;
-		pomoc();
-		return 0;
-	}
+    string arg, klucz, nazwa_wejscie, nazwa_wyjscie;
 
 
-    string klucz, nazwa_wejscie, nazwa_wyjscie, zaszyfrowane;        // badanie przelacznikow
-	if (argc > 1)                                                    // pierwszym parametrem jest nazwa programu, sprawdzamy wiec kolejne
+     if (argc == 2)                                                      //sprawdzenie, czy uzytkownik nie podaje za malo lub za duzo argumentow
+        {
+            if (argv[1] == "-h")
+            {
+                pomoc();
+            }
+
+            else
+            {
+                cout << endl << "Podano niewlasciwy przelacznik" << endl << endl;
+                pomoc();
+            }
+
+            return 0;
+        }
+
+
+    else if (argc != 7)
+        {
+            cout << endl << "Podano niewlasciwa ilosc argumentow" << endl << endl;
+            pomoc();
+            return 0;
+        }
+
+
+                                                                        // badanie przelacznikow
+	if (argc > 1)                                                       // pierwszym parametrem jest nazwa programu, sprawdzamy wiec kolejne
 	{
 		for (int i = 1; i < argc; i++)
 		{
-			string arg = argv[i];
-			if (arg == "-h")
-			{
-			    pomoc();
-				return 0;
-			}
+			arg = argv[i];
 
-			if (arg == "-k")
+            if (arg == "-k")
 			{
 				klucz = argv[i + 1];
 			}
